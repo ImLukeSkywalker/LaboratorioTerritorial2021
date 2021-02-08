@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        #map {
+            width: 1173px;
+            height: 821px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/Carreteras_1.js"></script>
+        <script src="data/Poblacionporlocalidad_2.js"></script>
+        <script src="data/PoligonoEstudio_3.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:24, minZoom:3
+        }).fitBounds([[19.682835386935665,-97.99347675880227],[20.606843895841287,-96.67233638770523]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_Positronretina_0');
+        map.getPane('pane_Positronretina_0').style.zIndex = 400;
+        var layer_Positronretina_0 = L.tileLayer('http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
+            pane: 'pane_Positronretina_0',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 3,
+            maxZoom: 24,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_Positronretina_0;
+        map.addLayer(layer_Positronretina_0);
+        function pop_Carreteras_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ID_RED'] !== null ? autolinker.link(feature.properties['ID_RED'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">TIPO_VIAL</th>\
+                        <td>' + (feature.properties['TIPO_VIAL'] !== null ? autolinker.link(feature.properties['TIPO_VIAL'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOMBRE'] !== null ? autolinker.link(feature.properties['NOMBRE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Carreteras_1_0() {
+            return {
+                pane: 'pane_Carreteras_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        function style_Carreteras_1_1() {
+            return {
+                pane: 'pane_Carreteras_1',
+                opacity: 1,
+                color: 'rgba(238,213,8,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'round',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Carreteras_1');
+        map.getPane('pane_Carreteras_1').style.zIndex = 401;
+        map.getPane('pane_Carreteras_1').style['mix-blend-mode'] = 'normal';
+        var layer_Carreteras_1 = new L.geoJson.multiStyle(json_Carreteras_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Carreteras_1',
+            layerName: 'layer_Carreteras_1',
+            pane: 'pane_Carreteras_1',
+            onEachFeature: pop_Carreteras_1,
+            styles: [style_Carreteras_1_0,style_Carreteras_1_1,]
+        });
+        bounds_group.addLayer(layer_Carreteras_1);
+        map.addLayer(layer_Carreteras_1);
+        function pop_Poblacionporlocalidad_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ENTIDAD'] !== null ? autolinker.link(feature.properties['ENTIDAD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOM_ENT'] !== null ? autolinker.link(feature.properties['NOM_ENT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MUN'] !== null ? autolinker.link(feature.properties['MUN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOM_MUN'] !== null ? autolinker.link(feature.properties['NOM_MUN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LOC'] !== null ? autolinker.link(feature.properties['LOC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NOM_LOC</th>\
+                        <td>' + (feature.properties['NOM_LOC'] !== null ? autolinker.link(feature.properties['NOM_LOC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>POBTOT</strong><br />' + (feature.properties['POBTOT'] !== null ? autolinker.link(feature.properties['POBTOT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">POBFEM</th>\
+                        <td>' + (feature.properties['POBFEM'] !== null ? autolinker.link(feature.properties['POBFEM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">POBMAS</th>\
+                        <td>' + (feature.properties['POBMAS'] !== null ? autolinker.link(feature.properties['POBMAS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">P3YM_HLI</th>\
+                        <td>' + (feature.properties['P3YM_HLI'] !== null ? autolinker.link(feature.properties['P3YM_HLI'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">P3HLINHE</th>\
+                        <td>' + (feature.properties['P3HLINHE'] !== null ? autolinker.link(feature.properties['P3HLINHE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">P8A14AN</th>\
+                        <td>' + (feature.properties['P8A14AN'] !== null ? autolinker.link(feature.properties['P8A14AN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PEA</th>\
+                        <td>' + (feature.properties['PEA'] !== null ? autolinker.link(feature.properties['PEA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PDESOCUP</th>\
+                        <td>' + (feature.properties['PDESOCUP'] !== null ? autolinker.link(feature.properties['PDESOCUP'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PSINDER</th>\
+                        <td>' + (feature.properties['PSINDER'] !== null ? autolinker.link(feature.properties['PSINDER'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">TVIVPARHAB</th>\
+                        <td>' + (feature.properties['TVIVPARHAB'] !== null ? autolinker.link(feature.properties['TVIVPARHAB'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">VPH_PISOTI</th>\
+                        <td>' + (feature.properties['VPH_PISOTI'] !== null ? autolinker.link(feature.properties['VPH_PISOTI'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">VPH_S_ELEC</th>\
+                        <td>' + (feature.properties['VPH_S_ELEC'] !== null ? autolinker.link(feature.properties['VPH_S_ELEC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">VPH_AGUAFV</th>\
+                        <td>' + (feature.properties['VPH_AGUAFV'] !== null ? autolinker.link(feature.properties['VPH_AGUAFV'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Poblacionporlocalidad_2_0(feature) {
+            if (feature.properties['POBTOT'] >= 1.000000 && feature.properties['POBTOT'] <= 100.000000 ) {
+                return {
+                pane: 'pane_Poblacionporlocalidad_2',
+                radius: 2.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,0,4,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['POBTOT'] >= 100.000000 && feature.properties['POBTOT'] <= 250.000000 ) {
+                return {
+                pane: 'pane_Poblacionporlocalidad_2',
+                radius: 3.5,
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,0,4,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['POBTOT'] >= 250.000000 && feature.properties['POBTOT'] <= 1000.000000 ) {
+                return {
+                pane: 'pane_Poblacionporlocalidad_2',
+                radius: 5.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,0,4,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['POBTOT'] >= 1000.000000 && feature.properties['POBTOT'] <= 2500.000000 ) {
+                return {
+                pane: 'pane_Poblacionporlocalidad_2',
+                radius: 6.5,
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,0,4,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['POBTOT'] >= 2500.000000 && feature.properties['POBTOT'] <= 62849.000000 ) {
+                return {
+                pane: 'pane_Poblacionporlocalidad_2',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,0,4,0.7)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Poblacionporlocalidad_2');
+        map.getPane('pane_Poblacionporlocalidad_2').style.zIndex = 402;
+        map.getPane('pane_Poblacionporlocalidad_2').style['mix-blend-mode'] = 'normal';
+        var layer_Poblacionporlocalidad_2 = new L.geoJson(json_Poblacionporlocalidad_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Poblacionporlocalidad_2',
+            layerName: 'layer_Poblacionporlocalidad_2',
+            pane: 'pane_Poblacionporlocalidad_2',
+            onEachFeature: pop_Poblacionporlocalidad_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Poblacionporlocalidad_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Poblacionporlocalidad_2);
+        map.addLayer(layer_Poblacionporlocalidad_2);
+        function pop_PoligonoEstudio_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CVEGEO'] !== null ? autolinker.link(feature.properties['CVEGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NOMGEO</th>\
+                        <td>' + (feature.properties['NOMGEO'] !== null ? autolinker.link(feature.properties['NOMGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PoligonoEstudio_3_0() {
+            return {
+                pane: 'pane_PoligonoEstudio_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PoligonoEstudio_3');
+        map.getPane('pane_PoligonoEstudio_3').style.zIndex = 403;
+        map.getPane('pane_PoligonoEstudio_3').style['mix-blend-mode'] = 'normal';
+        var layer_PoligonoEstudio_3 = new L.geoJson(json_PoligonoEstudio_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PoligonoEstudio_3',
+            layerName: 'layer_PoligonoEstudio_3',
+            pane: 'pane_PoligonoEstudio_3',
+            onEachFeature: pop_PoligonoEstudio_3,
+            style: style_PoligonoEstudio_3_0,
+        });
+        bounds_group.addLayer(layer_PoligonoEstudio_3);
+        map.addLayer(layer_PoligonoEstudio_3);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/PoligonoEstudio_3.png" /> Poligono Estudio': layer_PoligonoEstudio_3,'Poblacion por localidad<br /><table><tr><td style="text-align: center;"><img src="legend/Poblacionporlocalidad_2_11000.png" /></td><td>1 - 100 </td></tr><tr><td style="text-align: center;"><img src="legend/Poblacionporlocalidad_2_1002501.png" /></td><td>100 - 250 </td></tr><tr><td style="text-align: center;"><img src="legend/Poblacionporlocalidad_2_25010002.png" /></td><td>250 - 1000 </td></tr><tr><td style="text-align: center;"><img src="legend/Poblacionporlocalidad_2_100025003.png" /></td><td>1000 - 2500 </td></tr><tr><td style="text-align: center;"><img src="legend/Poblacionporlocalidad_2_2500628494.png" /></td><td>2500 - 62849 </td></tr></table>': layer_Poblacionporlocalidad_2,'<img src="legend/Carreteras_1.png" /> Carreteras': layer_Carreteras_1,"Positron (retina)": layer_Positronretina_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
