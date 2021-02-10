@@ -1,0 +1,1 @@
+var json_Sede_5 = {"type":"FeatureCollection","name":"Sede_5","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"NOM_LOC":"Ciudad de Cuetzalan"},"geometry":{"type":"Point","coordinates":[-97.52077056,20.01852028]}}]}
